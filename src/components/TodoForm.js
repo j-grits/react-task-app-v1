@@ -25,7 +25,8 @@ function TodoForm({ edit, onSubmit }) {
     e.preventDefault();
     if (!input) return;
 
-    onSubmit({ text: input, category });
+    const todo = { id: edit ? edit.id : null, text: input, category };
+    onSubmit(todo);
     setInput("");
     setCategory("");
   };

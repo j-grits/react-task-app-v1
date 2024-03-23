@@ -4,12 +4,19 @@ import Todo from "./Todo";
 
 function TodoList() {
   const [todos, setTodos] = useState([]);
+  const [updating, setUpdating] = useState(false);
 
   const addTodo = (todo) => {
     if (!todo.text || /^\s*$/.test(todo.text)) {
       return;
     }
-    const newTodos = [todo, ...todos];
+    const newTodo = {
+      id: Date.now(),
+      text: todo.text,
+      category: todo.category,
+      isComplete: false,
+    };
+    const newTodos = [newTodo, ...todos];
 
     setTodos(newTodos);
   };
@@ -31,13 +38,15 @@ function TodoList() {
   };
 
   const completeTodo = (id) => {
-    let updatedTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        todo.isComplete = !todo.isComplete;
-      }
-      return todo;
-    });
-    setTodos(updatedTodos);
+    if (!updating) {
+      let updatedTodos = todos.map((todo) => {
+        if (todo.id === id) {
+          todo.isComplete = !todo.isComplete;
+        }
+        return todo;
+      });
+      setTodos(updatedTodos);
+    }
   };
 
   return (
@@ -49,6 +58,7 @@ function TodoList() {
         completeTodo={completeTodo}
         removeTodo={removeTodo}
         updateTodo={updateTodo}
+        setUpdating={setUpdating}
       />
     </div>
   );
