@@ -3,7 +3,14 @@ import TodoForm from "./TodoForm";
 import { RiCloseCircleLine } from "react-icons/ri";
 import { TiEdit } from "react-icons/ti";
 
-function Todo({ todos, completeTodo, removeTodo, updateTodo, setUpdating }) {
+function Todo({
+  todos,
+  completeTodo,
+  removeTodo,
+  updateTodo,
+  setUpdating,
+  handleUpdateTodo,
+}) {
   const [edit, setEdit] = useState(null);
 
   const handleEditClick = (id) => {
@@ -11,14 +18,23 @@ function Todo({ todos, completeTodo, removeTodo, updateTodo, setUpdating }) {
     setEdit(id);
   };
 
-  const handleCancelEdit = () => {
-    setEdit(null);
-    setUpdating(false);
-  };
+  // const handleCancelEdit = () => {
+  //   setEdit(null);
+  //   setUpdating(false)
+  // };
 
-  const submitUpdate = (updatedTodo) => {
-    updateTodo(updatedTodo.id, updatedTodo);
-    handleCancelEdit();
+  // const submitUpdate = (updatedTodo) => {
+  //   updateTodo(updatedTodo.id, updatedTodo);
+  //   // handleCancelEdit();
+  //   setEdit(null);
+  //   setUpdating(false);
+  // };
+
+  const submitUpdate = async (updatedTodo) => {
+    await updateTodo(updatedTodo.id, updatedTodo);
+    setEdit(null); // Reset edit state after update
+    setUpdating(false);
+    handleUpdateTodo(updatedTodo); // Call callback function with updated todo data
   };
 
   const groupByCategory = todos.reduce((acc, todo) => {
@@ -43,7 +59,7 @@ function Todo({ todos, completeTodo, removeTodo, updateTodo, setUpdating }) {
               <TodoForm
                 edit={todo}
                 onSubmit={submitUpdate}
-                onCancel={handleCancelEdit}
+                // onCancel={handleCancelEdit}
               />
             ) : (
               <>
